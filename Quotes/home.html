@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quotes</title>
+    <style>
+        body{
+            background-color:blanchedalmond;
+        }
+        #quotes{
+            justify-content: center;
+            align-items: center;
+            display: flex;
+            flex-wrap: wrap;
+            height: 40vh;
+            width: 100vw;
+            font-size: 2em;
+        }
+        #author{
+            width: auto;
+            justify-content: center;
+            align-items: center;
+            display: flex;
+            flex-wrap: wrap;
+            font-size: 1.5em;
+            color:brown;
+            padding: 2rem;
+            /* border-style: solid; */
+        }
+        #btn,#tweets{
+            justify-content: right;
+            align-items: center;
+            font-size: 1.5em;
+        }
+    </style>
+</head>
+<body>
+    <div id = "quotes"> </div>
+    <div id = "author"> </div>
+    <!-- <button id="btn" onclick="getNewQuotes()">Click Here For New!!</button> -->
+    <button id="btn">Click Here For New!!</button>
+    <button id ="tweets"> Tweet </button>
+    <script>
+        let realData = "";
+        let data= "";
+        
+        const text = document.getElementById("quotes");
+        const author = document.getElementById("author");
+        const btn = document.getElementById("btn");
+        const tweets = document.getElementById("tweets");
+
+        const newTweet = () => {
+            let tweet =  `https://twitter.com/intent/tweet?text=${data}`;
+            // console.log(tweet);
+            window.open(tweet);
+        };
+        
+        const getNewQuotes = () => {
+            let randnum = Math.floor(Math.random() * (1643 - 1 + 1)) + 1;
+            // console.log(randnum);
+            if(realData[randnum].author != null) {
+                data = realData[randnum].text;
+                text.innerHTML = data;
+                author.innerHTML ="author name : "+ realData[randnum].author;
+            }
+        };
+        const getQuotes = async ()=> {
+            const api = "https://type.fit/api/quotes";
+            try {
+                let data = await fetch(api);
+                realData = await data.json();
+                // console.log(realData.length);
+                getNewQuotes();
+            } catch (err) {
+                console.log(err);
+            }
+        }
+        btn.addEventListener("click" ,  getNewQuotes);
+        tweets.addEventListener("click" ,  newTweet);
+        getQuotes();
+    </script>
+</body>
+</html>
